@@ -1,0 +1,23 @@
+institute_id,short_name,city,state,founding_year,institution_age,generation,nirf_rank,nirf_score,ug_total_graduating,ug_placed_latest,placement_rate_pct,ug_median_salary_lakh,ug_higher_studies
+IR-E-U-0456,IIT Madras,Chennai,Tamil Nadu,1959,66,Gen1_Pre1962,1,88.72,958,764,79.7,17.5,177
+IR-E-I-1074,IIT Delhi,New Delhi,Delhi,1961,64,Gen1_Pre1962,2,85.74,1064,810,76.1,19.08,58
+IR-E-U-0306,IIT Bombay,Mumbai,Maharashtra,1958,67,Gen1_Pre1962,3,83.65,1172,887,75.7,19.61,285
+IR-E-I-1075,IIT Kanpur,Kanpur,Uttar Pradesh,1959,66,Gen1_Pre1962,4,81.82,1133,754,66.5,19.4,283
+IR-E-U-0573,IIT Kharagpur,Kharagpur,West Bengal,1951,74,Gen1_Pre1962,5,78.69,1317,959,72.8,19.76,180
+IR-E-U-0560,IIT Roorkee,Roorkee,Uttarakhand,1847,178,Gen1_Pre1962,6,75.44,1102,769,69.8,17.0,333
+IR-E-U-0013,IIT Hyderabad,Hyderabad,Telangana,2008,17,Gen3_2001_2010,7,72.31,399,306,76.7,21.0,37
+IR-E-U-0053,IIT Guwahati,Guwahati,Assam,1994,31,Gen2_1962_2000,8,72.24,856,658,76.9,19.48,179
+IR-E-U-0701,IIT BHU,Varanasi,Uttar Pradesh,1919,106,Gen1_Pre1962,10,67.24,1392,1269,91.2,20.0,113
+IR-E-U-0273,IIT Indore,Indore,Madhya Pradesh,2009,16,Gen3_2001_2010,12,66.65,331,234,70.7,19.48,27
+IR-E-U-0205,IIT ISM,Dhanbad,Jharkhand,1926,99,Gen1_Pre1962,15,65.37,963,782,81.2,12.0,34
+IR-E-U-0064,IIT Patna,Patna,Bihar,2008,17,Gen3_2001_2010,19,64.52,335,320,95.5,22.5,15
+IR-E-U-0139,IIT Gandhinagar,Gandhinagar,Gujarat,2008,17,Gen3_2001_2010,25,62.31,214,160,74.8,14.0,51
+IR-E-U-0184,IIT Mandi,Mandi,Himachal Pradesh,2009,16,Gen3_2001_2010,26,62.08,286,197,68.9,18.5,75
+IR-E-U-0395,IIT Jodhpur,Jodhpur,Rajasthan,2008,17,Gen3_2001_2010,27,61.31,418,322,77.0,12.0,94
+IR-E-U-0378,IIT Ropar,Rupnagar,Punjab,2008,17,Gen3_2001_2010,32,59.66,321,220,68.5,16.97,63
+IR-E-U-0355,IIT Bhubaneswar,Bhubaneswar,Odisha,2008,17,Gen3_2001_2010,39,58.22,420,328,78.1,14.0,52
+IR-E-U-0878,IIT Palakkad,Palakkad,Kerala,2015,10,Gen4_2011_plus,64,51.2,156,105,67.3,12.0,16
+IR-E-U-0906,IIT Jammu,Jammu,Jammu and Kashmir,2016,9,Gen4_2011_plus,56,53.08,178,113,63.5,11.7,19
+IR-E-U-0844,IIT Tirupati,Tirupati,Andhra Pradesh,2015,10,Gen4_2011_plus,57,52.73,205,114,55.6,11.0,72
+IR-E-U-0946,IIT Bhilai,Durg,Chhattisgarh,2016,9,Gen4_2011_plus,72,50.37,162,116,71.6,12.0,14
+IR-E-U-0899,IIT Dharwad,Dharwad,Karnataka,2016,9,Gen4_2011_plus,77,48.61,154,95,61.7,11.62,39

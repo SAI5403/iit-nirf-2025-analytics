@@ -1,0 +1,23 @@
+institute_id,short_name,city,state,founding_year,institution_age,generation,nirf_rank,nirf_score,phd_students_fulltime,phd_students_parttime,phd_graduated_latest,phd_output_rate_pct
+IR-E-U-0456,IIT Madras,Chennai,Tamil Nadu,1959,66,Gen1_Pre1962,1,88.72,1798,200,314,17.5
+IR-E-I-1074,IIT Delhi,New Delhi,Delhi,1961,64,Gen1_Pre1962,2,85.74,2866,546,464,16.2
+IR-E-U-0306,IIT Bombay,Mumbai,Maharashtra,1958,67,Gen1_Pre1962,3,83.65,3523,466,491,13.9
+IR-E-I-1075,IIT Kanpur,Kanpur,Uttar Pradesh,1959,66,Gen1_Pre1962,4,81.82,2068,43,238,11.5
+IR-E-U-0573,IIT Kharagpur,Kharagpur,West Bengal,1951,74,Gen1_Pre1962,5,78.69,3409,0,494,14.5
+IR-E-U-0560,IIT Roorkee,Roorkee,Uttarakhand,1847,178,Gen1_Pre1962,6,75.44,2806,18,145,5.2
+IR-E-U-0013,IIT Hyderabad,Hyderabad,Telangana,2008,17,Gen3_2001_2010,7,72.31,711,165,89,12.5
+IR-E-U-0053,IIT Guwahati,Guwahati,Assam,1994,31,Gen2_1962_2000,8,72.24,2146,174,263,12.3
+IR-E-U-0701,IIT BHU,Varanasi,Uttar Pradesh,1919,106,Gen1_Pre1962,10,67.24,1123,73,255,22.7
+IR-E-U-0273,IIT Indore,Indore,Madhya Pradesh,2009,16,Gen3_2001_2010,12,66.65,633,41,81,12.8
+IR-E-U-0205,IIT ISM,Dhanbad,Jharkhand,1926,99,Gen1_Pre1962,15,65.37,992,380,301,30.3
+IR-E-U-0064,IIT Patna,Patna,Bihar,2008,17,Gen3_2001_2010,19,64.52,636,106,132,20.8
+IR-E-U-0139,IIT Gandhinagar,Gandhinagar,Gujarat,2008,17,Gen3_2001_2010,25,62.31,590,5,73,12.4
+IR-E-U-0184,IIT Mandi,Mandi,Himachal Pradesh,2009,16,Gen3_2001_2010,26,62.08,672,48,49,7.3
+IR-E-U-0395,IIT Jodhpur,Jodhpur,Rajasthan,2008,17,Gen3_2001_2010,27,61.31,788,132,25,3.2
+IR-E-U-0378,IIT Ropar,Rupnagar,Punjab,2008,17,Gen3_2001_2010,32,59.66,917,56,115,12.5
+IR-E-U-0355,IIT Bhubaneswar,Bhubaneswar,Odisha,2008,17,Gen3_2001_2010,39,58.22,450,0,69,15.3
+IR-E-U-0878,IIT Palakkad,Palakkad,Kerala,2015,10,Gen4_2011_plus,64,51.2,184,21,11,6.0
+IR-E-U-0906,IIT Jammu,Jammu,Jammu and Kashmir,2016,9,Gen4_2011_plus,56,53.08,208,5,16,7.7
+IR-E-U-0844,IIT Tirupati,Tirupati,Andhra Pradesh,2015,10,Gen4_2011_plus,57,52.73,148,27,5,3.4
+IR-E-U-0946,IIT Bhilai,Durg,Chhattisgarh,2016,9,Gen4_2011_plus,72,50.37,74,12,9,12.2
+IR-E-U-0899,IIT Dharwad,Dharwad,Karnataka,2016,9,Gen4_2011_plus,77,48.61,148,4,15,10.1
