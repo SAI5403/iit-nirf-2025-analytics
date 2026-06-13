@@ -311,11 +311,21 @@ with tabs[2]:
     if age_df.empty:
         st.info("Faculty age-group file was not found.")
     else:
-        id_cols = [c for c in ["short_name", "generation"] if c in age_df.columns]
-        value_cols = [c for c in age_df.columns if c not in ["institute_id", "short_name", "city", "state", "generation"]]
-        age_long = age_df.melt(
-            id_vars=id_cols, value_vars=value_cols, var_name="age_group", value_name="faculty_count"
-        )
+        if {"age_group", "faculty_count"}.issubset(age_df.columns):
+            age_long = age_df.copy()
+        else:
+            id_cols = [c for c in ["short_name", "generation"] if c in age_df.columns]
+            value_cols = [
+                c
+                for c in age_df.columns
+                if c not in ["institute_id", "short_name", "city", "state", "generation"]
+            ]
+            age_long = age_df.melt(
+                id_vars=id_cols,
+                value_vars=value_cols,
+                var_name="age_group",
+                value_name="count",
+            ).rename(columns={"count": "faculty_count"})
         st.plotly_chart(
             px.bar(
                 age_long,
@@ -341,8 +351,21 @@ with tabs[2]:
     if join_df.empty:
         st.info("Faculty joining-period file was not found.")
     else:
-        value_cols = [c for c in join_df.columns if c not in ["institute_id", "short_name", "city", "state", "generation"]]
-        heatmap_data = join_df.set_index("short_name")[value_cols]
+        if {"joining_period", "faculty_count"}.issubset(join_df.columns):
+            heatmap_data = join_df.pivot_table(
+                index="short_name",
+                columns="joining_period",
+                values="faculty_count",
+                aggfunc="sum",
+                fill_value=0,
+            )
+        else:
+            value_cols = [
+                c
+                for c in join_df.columns
+                if c not in ["institute_id", "short_name", "city", "state", "generation"]
+            ]
+            heatmap_data = join_df.set_index("short_name")[value_cols]
         st.plotly_chart(
             px.imshow(
                 heatmap_data,
