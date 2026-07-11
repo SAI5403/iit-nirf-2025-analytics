@@ -34,6 +34,14 @@ def find_data_file(filename: str) -> Path:
     return DATA_DIR_CANDIDATES[0] / filename
 
 
+def find_first_data_file(filenames: list[str]) -> Path | None:
+    for filename in filenames:
+        path = find_data_file(filename)
+        if path.exists():
+            return path
+    return None
+
+
 MASTER_FILE = find_data_file("00_MASTER_IIT_NIRF_2025.csv")
 AGE_FILE = find_data_file("09_faculty_age_group_summary.csv")
 JOIN_FILE = find_data_file("10_faculty_joining_period_summary.csv")
@@ -124,6 +132,166 @@ def normalized_scores(df: pd.DataFrame, columns: list[str]):
     return norm.fillna(0)
 
 
+@st.cache_data
+def load_twitter_data():
+    path = find_first_data_file(
+        [
+            "iit_x_followers_2026-07-09.csv",
+            "iit_x_followers.csv",
+            "iit_twitter_followers.csv",
+            "twitter_analysis.csv",
+        ]
+    )
+    if path is None:
+        return pd.DataFrame()
+    out = pd.read_csv(path)
+    for col in ["followers_count", "posts_count"]:
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
+    return out
+
+
+@st.cache_data
+def load_google_trends_data():
+    files_map = {
+        "group1": "google_trends_group1.csv",
+        "group2": "google_trends_group2.csv",
+        "group3": "google_trends_group3.csv",
+        "group4": "google_trends_group4.csv",
+        "group5": "google_trends_group5.csv",
+        "group6": "google_trends_group6.csv",
+    }
+    paths = {group: find_data_file(filename) for group, filename in files_map.items()}
+    if not all(path.exists() for path in paths.values()):
+        monthly_path = find_first_data_file(["iit_google_trends_monthly_normalized.csv"])
+        if monthly_path is None:
+            return pd.DataFrame(), pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+        monthly = pd.read_csv(monthly_path)
+        time_col = "Time" if "Time" in monthly.columns else monthly.columns[0]
+        monthly[time_col] = pd.to_datetime(monthly[time_col])
+        monthly = monthly.set_index(time_col)
+    else:
+        rename_map = {
+            "Indian Institute Of Technology Delhi (IIT Delhi)": "IIT Delhi",
+            "Indian Institute of Technology Kanpur": "IIT Kanpur",
+            "Indian Institute of Technology, Kharagpur": "IIT Kharagpur",
+            "Indian Institute Of Technologyâ€“Madras (IITâ€“Madras)": "IIT Madras",
+            "Indian Institute of Technology Bombay": "IIT Bombay",
+            "Indian Institute of Technology Guwahati": "IIT Guwahati",
+            "Indian Institute Of Technology Roorkee": "IIT Roorkee",
+            "Indian Institute Of Technologyâ€“Ropar (IITâ€“Ropar)": "IIT Ropar",
+            "Indian Institute of Technology, Patna": "IIT Patna",
+            "Indian Institute Of Technology Gandhinagar (IIT Gandhinagar)": "IIT Gandhinagar",
+            "Indian Institute of Technology, Hyderabad": "IIT Hyderabad",
+            "Indian Institute of Technology (IIT), Jodhpur": "IIT Jodhpur",
+            "Indian Institute Of Technology (IIT) Bhubaneswar": "IIT Bhubaneswar",
+            "Indian Institute of Technology Indore": "IIT Indore",
+            "Indian Institute of Technology Mandi": "IIT Mandi",
+            "Indian Institute of Technology (BHU) Varanasi": "IIT BHU",
+            "Indian Institute Of Technologyâ€“Palakkad (IITâ€“Palakkad)": "IIT Palakkad",
+            "Indian Institute Of Technology (IIT) Tirupati": "IIT Tirupati",
+            "Indian Institute of Technology (Indian School of Mines), Dhanbad": "IIT Dhanbad",
+            "Indian Institute of Technology Bhilai": "IIT Bhilai",
+            "Indian Institute Of Technology Goa": "IIT Goa",
+            "Indian Institute of Technology, Jammu": "IIT Jammu",
+            "Indian Institute Of Technology Dharwad": "IIT Dharwad",
+        }
+        iit_order = [
+            "IIT Kharagpur",
+            "IIT Bombay",
+            "IIT Madras",
+            "IIT Kanpur",
+            "IIT Delhi",
+            "IIT Guwahati",
+            "IIT Roorkee",
+            "IIT Ropar",
+            "IIT Bhubaneswar",
+            "IIT Gandhinagar",
+            "IIT Hyderabad",
+            "IIT Jodhpur",
+            "IIT Patna",
+            "IIT Indore",
+            "IIT Mandi",
+            "IIT BHU",
+            "IIT Palakkad",
+            "IIT Tirupati",
+            "IIT Dhanbad",
+            "IIT Bhilai",
+            "IIT Goa",
+            "IIT Jammu",
+            "IIT Dharwad",
+        ]
+        group_dfs = {}
+        for group, path in paths.items():
+            trends = pd.read_csv(path)
+            trends["Time"] = pd.to_datetime(trends["Time"])
+            trends = trends.set_index("Time").rename(columns=rename_map)
+            for col in trends.columns:
+                trends[col] = pd.to_numeric(trends[col], errors="coerce")
+            group_dfs[group] = trends
+
+        anchor_name = "IIT Delhi"
+        monthly = group_dfs["group1"].copy()
+        master_anchor = monthly[anchor_name]
+        for group_name, trends in group_dfs.items():
+            if group_name == "group1":
+                continue
+            common_dates = master_anchor.index.intersection(trends.index)
+            anchor_master = master_anchor.loc[common_dates]
+            anchor_group = trends.loc[common_dates, anchor_name]
+            valid = (anchor_master > 0) & (anchor_group > 0)
+            scale_factor = (anchor_master[valid] / anchor_group[valid]).median() if valid.sum() else 1
+            scaled = trends * scale_factor
+            for col in scaled.columns:
+                if col != anchor_name:
+                    monthly[col] = scaled[col]
+        monthly = monthly[[col for col in iit_order if col in monthly.columns]]
+
+    monthly.index.name = "Time"
+    avg = monthly.mean().sort_values(ascending=False).reset_index()
+    avg.columns = ["iit", "average_google_trends_interest"]
+    overall = monthly.mean(axis=1).reset_index()
+    overall.columns = ["month", "average_google_trends_interest"]
+    peak = monthly.idxmax().reset_index()
+    peak.columns = ["iit", "peak_month"]
+    peak["peak_value"] = [monthly.loc[row["peak_month"], row["iit"]] for _, row in peak.iterrows()]
+    peak["peak_month"] = pd.to_datetime(peak["peak_month"]).dt.strftime("%B %Y")
+
+    season_source = monthly.copy()
+    season_source["month"] = season_source.index.month_name()
+    month_order = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
+    seasonality = (
+        season_source.groupby("month")[monthly.columns]
+        .mean()
+        .mean(axis=1)
+        .reindex(month_order)
+        .reset_index()
+    )
+    seasonality.columns = ["month", "average_google_trends_interest"]
+    return monthly, avg, overall, seasonality
+
+
+@st.cache_data
+def load_optional_table(filenames: list[str]):
+    path = find_first_data_file(filenames)
+    if path is None:
+        return pd.DataFrame()
+    return pd.read_csv(path)
+
+
 df, age_df, join_df = load_data()
 all_numeric = numeric_columns(df)
 clustered_all, _, _, _ = clustered_data(df, 3)
@@ -172,6 +340,8 @@ tabs = st.tabs(
         "Correlation Explorer",
         "PCA & Clustering",
         "Ranking Simulator",
+        "Search & Social",
+        "Campus & Research",
         "Audit & Insights",
         "Data",
     ]
@@ -558,6 +728,224 @@ with tabs[5]:
         )
 
 with tabs[6]:
+    st.subheader("Google Trends and X/Twitter analysis")
+
+    x_df = load_twitter_data()
+    monthly_trends, avg_trends, overall_trends, seasonality = load_google_trends_data()
+
+    st.write("X/Twitter official account metrics")
+    if x_df.empty:
+        st.info(
+            "Twitter/X follower data was not found. Upload one of these files to data/: "
+            "iit_x_followers_2026-07-09.csv, iit_x_followers.csv, or iit_twitter_followers.csv."
+        )
+    else:
+        x_cols = st.columns(3)
+        x_cols[0].metric("Accounts tracked", len(x_df))
+        if "followers_count" in x_df.columns:
+            top_followers = x_df.sort_values("followers_count", ascending=False).iloc[0]
+            x_cols[1].metric("Most followed", top_followers["short_name"])
+        if "posts_count" in x_df.columns:
+            top_posts = x_df.sort_values("posts_count", ascending=False).iloc[0]
+            x_cols[2].metric("Most active", top_posts["short_name"])
+
+        if {"short_name", "followers_count"}.issubset(x_df.columns):
+            st.plotly_chart(
+                px.bar(
+                    x_df.sort_values("followers_count", ascending=True),
+                    x="followers_count",
+                    y="short_name",
+                    orientation="h",
+                    title="Official X/Twitter followers across IITs",
+                ),
+                use_container_width=True,
+            )
+        if {"short_name", "posts_count"}.issubset(x_df.columns):
+            st.plotly_chart(
+                px.bar(
+                    x_df.sort_values("posts_count", ascending=True),
+                    x="posts_count",
+                    y="short_name",
+                    orientation="h",
+                    title="Official X/Twitter posting activity",
+                ),
+                use_container_width=True,
+            )
+        if {"posts_count", "followers_count", "short_name"}.issubset(x_df.columns):
+            st.plotly_chart(
+                px.scatter(
+                    x_df,
+                    x="posts_count",
+                    y="followers_count",
+                    hover_name="short_name",
+                    text="short_name",
+                    title="Posting activity vs followers",
+                ),
+                use_container_width=True,
+            )
+        st.dataframe(x_df, use_container_width=True)
+
+    st.write("Google Trends search-interest analysis")
+    if monthly_trends.empty:
+        st.info(
+            "Google Trends files were not found. Upload google_trends_group1.csv through "
+            "google_trends_group6.csv to data/."
+        )
+    else:
+        selected_trend_iits = st.multiselect(
+            "Select IITs for trend line",
+            monthly_trends.columns.tolist(),
+            default=avg_trends["iit"].head(5).tolist(),
+        )
+        if selected_trend_iits:
+            trend_long = (
+                monthly_trends[selected_trend_iits]
+                .reset_index()
+                .melt(id_vars=monthly_trends.index.name or "Time", var_name="iit", value_name="interest")
+            )
+            st.plotly_chart(
+                px.line(
+                    trend_long,
+                    x=monthly_trends.index.name or "Time",
+                    y="interest",
+                    color="iit",
+                    title="Monthly Google Trends interest",
+                ),
+                use_container_width=True,
+            )
+        st.plotly_chart(
+            px.bar(
+                avg_trends.sort_values("average_google_trends_interest", ascending=True),
+                x="average_google_trends_interest",
+                y="iit",
+                orientation="h",
+                title="Average Google search interest",
+            ),
+            use_container_width=True,
+        )
+        st.plotly_chart(
+            px.line(
+                overall_trends,
+                x="month",
+                y="average_google_trends_interest",
+                markers=True,
+                title="Overall IIT search-interest trend",
+            ),
+            use_container_width=True,
+        )
+        st.plotly_chart(
+            px.bar(
+                seasonality,
+                x="month",
+                y="average_google_trends_interest",
+                title="Month-of-year search seasonality",
+            ),
+            use_container_width=True,
+        )
+
+with tabs[7]:
+    st.subheader("Campus buildings, accessibility, and research metrics")
+
+    building_df = load_optional_table(
+        [
+            "iit_building_count_results_2023.csv",
+            "iit_building_counts_2023.csv",
+            "iit_buildings_count_2023.csv",
+            "iit_open_buildings_2023.csv",
+        ]
+    )
+    area_df = load_optional_table(["iit_reported_campus_area_wikipedia.csv"])
+    airport_df = load_optional_table(["iit_nearest_airports_updated.csv", "iit_nearest_airports.csv"])
+    openalex_df = load_optional_table(
+        ["iit_openalex_wikipedia_metrics_updated.csv", "iit_openalex_metrics.csv"]
+    )
+
+    if building_df.empty:
+        st.info(
+            "Building-count results were not found. Upload a generated CSV such as "
+            "iit_building_count_results_2023.csv to data/. The dashboard does not run "
+            "Earth Engine during deployment."
+        )
+    else:
+        count_col = (
+            "estimated_building_count"
+            if "estimated_building_count" in building_df.columns
+            else "building_count"
+        )
+        if count_col in building_df.columns and "short_name" in building_df.columns:
+            building_df["building_count_rounded"] = pd.to_numeric(
+                building_df[count_col], errors="coerce"
+            ).round()
+            st.plotly_chart(
+                px.bar(
+                    building_df.sort_values("building_count_rounded", ascending=True),
+                    x="building_count_rounded",
+                    y="short_name",
+                    orientation="h",
+                    title="Approximate building counts across IIT campuses",
+                ),
+                use_container_width=True,
+            )
+            if not area_df.empty and "reported_area_acres" in area_df.columns:
+                merged_building_area = building_df.merge(
+                    area_df[["short_name", "reported_area_acres"]],
+                    on="short_name",
+                    how="left",
+                )
+                st.plotly_chart(
+                    px.scatter(
+                        merged_building_area,
+                        x="reported_area_acres",
+                        y="building_count_rounded",
+                        hover_name="short_name",
+                        title="Building count vs reported campus area",
+                    ),
+                    use_container_width=True,
+                )
+        st.dataframe(building_df, use_container_width=True)
+
+    if airport_df.empty:
+        st.info("Nearest-airport data was not found. Upload iit_nearest_airports_updated.csv to data/.")
+    else:
+        if {"short_name", "distance_to_airport_km"}.issubset(airport_df.columns):
+            st.plotly_chart(
+                px.bar(
+                    airport_df.sort_values("distance_to_airport_km", ascending=False),
+                    x="short_name",
+                    y="distance_to_airport_km",
+                    color="nearest_airport_iata" if "nearest_airport_iata" in airport_df.columns else None,
+                    title="Distance from IIT campus to nearest major airport",
+                ),
+                use_container_width=True,
+            )
+        st.dataframe(airport_df, use_container_width=True)
+
+    if openalex_df.empty:
+        st.info(
+            "OpenAlex/Wikipedia research metrics were not found. Upload "
+            "iit_openalex_wikipedia_metrics_updated.csv to data/."
+        )
+    else:
+        metric_candidates = [
+            c
+            for c in ["works_count", "cited_by_count", "h_index", "i10_index", "wikipedia_pageviews"]
+            if c in openalex_df.columns
+        ]
+        selected_metric = st.selectbox("Research metric", metric_candidates) if metric_candidates else None
+        if selected_metric and "short_name" in openalex_df.columns:
+            st.plotly_chart(
+                px.bar(
+                    openalex_df.sort_values(selected_metric, ascending=True),
+                    x=selected_metric,
+                    y="short_name",
+                    orientation="h",
+                    title=f"{selected_metric} across IITs",
+                ),
+                use_container_width=True,
+            )
+        st.dataframe(openalex_df, use_container_width=True)
+
+with tabs[8]:
     st.subheader("Missing-value audit and research insights")
     missing = df.isna().sum().reset_index()
     missing.columns = ["column", "missing_values"]
@@ -597,7 +985,7 @@ with tabs[6]:
 """
     )
 
-with tabs[7]:
+with tabs[9]:
     st.subheader("Data table and export")
     st.dataframe(filtered.sort_values("nirf_rank"), use_container_width=True)
     st.download_button(
