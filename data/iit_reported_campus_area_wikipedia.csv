@@ -1,0 +1,24 @@
+short_name,iit_name,wikipedia_title,reported_area_acres,area_source_unit,matched_text,source_url
+IIT Kharagpur,Indian Institute of Technology Kharagpur,IIT Kharagpur,2200.00,acres,"Campus 2,200 acres (890 ha) Suburban",https://en.wikipedia.org/wiki/IIT_Kharagpur
+IIT Bombay,Indian Institute of Technology Bombay,IIT Bombay,545.00,acres,"Campus 545 acres (221 ha) Urban",https://en.wikipedia.org/wiki/IIT_Bombay
+IIT Madras,Indian Institute of Technology Madras,IIT Madras,620.00,acres,"Campus Urban 620 acres (2.5 km2)",https://en.wikipedia.org/wiki/IIT_Madras
+IIT Kanpur,Indian Institute of Technology Kanpur,IIT Kanpur,1055.00,acres,"Campus Urban, 1,055 acres (427 ha)",https://en.wikipedia.org/wiki/IIT_Kanpur
+IIT Delhi,Indian Institute of Technology Delhi,IIT Delhi,375.00,acres,"Campus 375 acres (1.52 km2) Urban",https://en.wikipedia.org/wiki/IIT_Delhi
+IIT Guwahati,Indian Institute of Technology Guwahati,IIT Guwahati,703.95,acres,"Campus Urban, 703.95 acres (2.8488 km2)",https://en.wikipedia.org/wiki/IIT_Guwahati
+IIT Roorkee,Indian Institute of Technology Roorkee,IIT Roorkee,365.00,acres,"Campus Urban 365 acres (1.48 km2)",https://en.wikipedia.org/wiki/IIT_Roorkee
+IIT Ropar,Indian Institute of Technology Ropar,Indian Institute of Technology Ropar,525.00,acres,"Campus Urban 525 acres (2.12 km2)",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Ropar
+IIT Bhubaneswar,Indian Institute of Technology Bhubaneswar,Indian Institute of Technology Bhubaneswar,936.00,acres,"Campus Rural 936 acres (3.79 km2)",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Bhubaneswar
+IIT Gandhinagar,Indian Institute of Technology Gandhinagar,Indian Institute of Technology Gandhinagar,399.00,acres,"Campus 399 acres (1.61 km2) Urban",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Gandhinagar
+IIT Hyderabad,Indian Institute of Technology Hyderabad,Indian Institute of Technology Hyderabad,576.00,acres,"Campus 576 acres (2.33 km2) Rural",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Hyderabad
+IIT Jodhpur,Indian Institute of Technology Jodhpur,Indian Institute of Technology Jodhpur,852.00,acres,"Campus 852 acres (3.45 km2) Urban",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Jodhpur
+IIT Patna,Indian Institute of Technology Patna,Indian Institute of Technology Patna,501.00,acres,"Campus 501 acres (202.7 ha) Urban",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Patna
+IIT Indore,Indian Institute of Technology Indore,Indian Institute of Technology Indore,501.42,acres,"Campus Sub-Urban 501.42 acres (2.0292 km2)",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Indore
+IIT Mandi,Indian Institute of Technology Mandi,Indian Institute of Technology Mandi,538.00,acres,"Campus 538 acres (218 ha) Rural",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Mandi
+IIT BHU,Indian Institute of Technology Varanasi BHU,IIT (BHU) Varanasi,425.00,acres,"Campus 425 acres (172 ha)",https://en.wikipedia.org/wiki/IIT_(BHU)_Varanasi
+IIT Palakkad,Indian Institute of Technology Palakkad,Indian Institute of Technology Palakkad,504.00,acres,"Campus 504 acres (204 ha)",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Palakkad
+IIT Tirupati,Indian Institute of Technology Tirupati,Indian Institute of Technology Tirupati,540.00,acres,"Campus 540 acres (220 ha) Sub-Urban",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Tirupati
+IIT Dhanbad,Indian Institute of Technology Dhanbad,IIT (ISM) Dhanbad,444.98,acres,matched_from_page_text,https://en.wikipedia.org/wiki/IIT_(ISM)_Dhanbad
+IIT Bhilai,Indian Institute of Technology Bhilai,Indian Institute of Technology Bhilai,445.00,acres,"Campus 445 acres Urban, Eco Friendly Campus",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Bhilai
+IIT Goa,Indian Institute of Technology Goa,Indian Institute of Technology Goa,320.00,acres,matched_from_page_text,https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Goa
+IIT Jammu,Indian Institute of Technology Jammu,Indian Institute of Technology Jammu,25.00,acres,matched_from_page_text,https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Jammu
+IIT Dharwad,Indian Institute of Technology Dharwad,Indian Institute of Technology Dharwad,470.00,acres,"Campus Main campus - 470 acres",https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Dharwad
